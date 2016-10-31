@@ -8,3 +8,11 @@ Module dependencies (installable via pip):
 * exifread
 * libxmp (python-xmp-toolkit)
 * termcolor
+
+## How to use
+You just have to execute the script with the folder containing the files to be analysed as an argument. 
+
+For instance, this will analyse all files inside ./samples. 
+```
+python metadatos.py ./samples
+```
