@@ -3,6 +3,11 @@
 
 from PyPDF2 import PdfFileReader,PdfFileWriter # Module for PDF manipulation
 import docx # Module for DOCX manipulation
+from PIL import Image # Module for image manipulation
+from PIL.ExifTags import TAGS, GPSTAGS
+import exifread # Module for EXIF metadata manipulation
+from libxmp.utils import file_to_dict # Module for XMP metadata manipulation
+from libxmp import consts
 import os # Module for OS interaction
 import sys # Module for system interaction
 from termcolor import cprint # Module for terminal colored output
@@ -27,8 +32,93 @@ def printMeta(target):
 				print_pdf(file_full_path)
 			elif ext == "docx":
 				print_docx(file_full_path)
+			elif ext in ("jpg","jpeg",): 
+				print_jpg(file_full_path)
+			elif ext in ("png","gif","bmp"): 
+				print_png_gif_bmp(file_full_path)
+			elif ext in ("tif","tiff"):
+				print_tiff(file_full_path)
 			else: 
 				pass
+
+
+def print_jpg(file_full_path): 
+	""" Analyzes the metadate of a JPG/JPEG file """
+	# Header with file path
+	cprint("[+] Metadata for file: %s" % (file_full_path), "green", attrs=["bold"])
+	# Open the file
+	image = Image.open(file_full_path)
+	# Print XMP metadata
+	cprint("\t-----XMP METADATA-----", "cyan")
+	xmp = file_to_dict(file_full_path)
+	if not xmp: 
+		cprint("\tNo XMP metadata found", "red")
+	else: 
+		dc = xmp[consts.XMP_NS_DC]
+		cprint("\t-" + dc[0][0], "cyan")
+		cprint("\t-" + dc[0][1], "cyan")
+
+		for key, value in dc[0][2].items(): 
+			cprint("\t-" + key + ": ", "cyan", end="")
+			cprint(str(value))
+	# Print EXIF metadata
+	cprint("\t-----EXIF METADATA-----", "cyan")
+	info = image._getexif()
+	if not info: 
+		cprint("\tNo XMP metadata found", "red")
+	else:
+		for tag, value in info.items():
+		    key = TAGS.get(tag, tag)
+		    print(key + " " + str(value))
+
+def print_png_gif_bmp(file_full_path): 
+	""" Analyzes the metadate of a PNG file """
+	# Header with file path
+	cprint("[+] Metadata for file: %s" % (file_full_path), "green", attrs=["bold"])	
+	# Open the file
+	image = Image.open(file_full_path)
+	
+	# Print XMP metadata
+	cprint("\t-----XMP METADATA-----", "cyan")
+	xmp = file_to_dict(file_full_path)
+	if not xmp: 
+		cprint("\tNo XMP metadata found", "red")
+	else: 
+		dc = xmp[consts.XMP_NS_DC]
+		cprint("\t-" + dc[0][0], "cyan")
+		cprint("\t-" + dc[0][1], "cyan")
+
+		for key, value in dc[0][2].items(): 
+			cprint("\t-" + key + ": ", "cyan", end="")
+			cprint(str(value))
+
+
+def print_tiff(file_full_path): 
+	""" Analyzes the metadate of a JPG/JPEG file """
+	# Header with file path
+	cprint("[+] Metadata for file: %s" % (file_full_path), "green", attrs=["bold"])
+	# Open the file
+	image = open(file_full_path, 'rb')
+
+	# Print XMP metadata
+	cprint("\t-----XMP METADATA-----", "cyan")
+	xmp = file_to_dict(file_full_path)
+	dc = xmp[consts.XMP_NS_DC]
+	cprint("\t-" + dc[0][0], "cyan")
+	cprint("\t-" + dc[0][1], "cyan")
+
+	for key, value in dc[0][2].items(): 
+		cprint("\t-" + key + ": ", "cyan", end="")
+		cprint(str(value))
+
+	# Print EXIF metadata
+	cprint("\n\t-----EXIF METADATA-----", "cyan")
+	tags = exifread.process_file(image)
+	for tag in tags.keys():
+	    if tag not in ('JPEGThumbnail', 'TIFFThumbnail', 'Filename', 'EXIF MakerNote'):
+	    	cprint("\t-" + str(tag) + ": ", "cyan", end="")
+	    	cprint(str(tags[tag]))
+
 
 def print_docx(file_full_path): 
 	"""Analyzes the metadata of a .docx file"""
