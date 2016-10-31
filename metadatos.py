@@ -15,7 +15,8 @@ import datetime
 
 """
 CREATED BY GUILLERMO ROMAN FERRERO a.k.a. hartek
-This script prints the metadata of the PDF files found recursively in a directory given by argument
+This script prints the metadata of the files found recursively in a directory given by argument. 
+Currently supports PDF, DOCX, JPEG, PNG, GIF, BMP and TIFF files. 
 """
 
 def printMeta(target): 
