@@ -1,4 +1,4 @@
-d#!/usr/bin/python
+#!/usr/bin/python
 # -*- encoding: utf-8 -*- 
 
 from PyPDF2 import PdfFileReader,PdfFileWriter # Module for PDF manipulation
