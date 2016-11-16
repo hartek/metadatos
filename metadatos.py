@@ -28,7 +28,10 @@ def printMeta(target):
 	for dirpath, dirnames, files in walk: 
 		for name in files: 
 			ext = name.lower().rsplit(".", 1)[-1]
-			file_full_path = dirpath+os.path.sep+name
+			if dirpath[-1:] == "/": 
+				file_full_path = dirpath+name
+			else: 
+				file_full_path = dirpath+os.path.sep+name
 			if ext == "pdf":
 				print_pdf(file_full_path)
 			elif ext == "docx":
@@ -63,14 +66,15 @@ def print_jpg(file_full_path):
 			cprint("\t-" + key + ": ", "cyan", end="")
 			cprint(str(value))
 	# Print EXIF metadata
-	cprint("\t-----EXIF METADATA-----", "cyan")
+	cprint("\n\t-----EXIF METADATA-----", "cyan")
 	info = image._getexif()
 	if not info: 
 		cprint("\tNo EXIF metadata found", "red")
 	else:
 		for tag, value in info.items():
 		    key = TAGS.get(tag, tag)
-		    print(key + " " + str(value))
+		    cprint("\t-" + key + ": ", "cyan", end="")
+		    cprint(str(value))
 
 def print_png_gif_bmp(file_full_path): 
 	""" Analyzes the metadate of a PNG file """
