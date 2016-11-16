@@ -1,4 +1,4 @@
-#!/usr/bin/python
+d#!/usr/bin/python
 # -*- encoding: utf-8 -*- 
 
 from PyPDF2 import PdfFileReader,PdfFileWriter # Module for PDF manipulation
@@ -66,7 +66,7 @@ def print_jpg(file_full_path):
 	cprint("\t-----EXIF METADATA-----", "cyan")
 	info = image._getexif()
 	if not info: 
-		cprint("\tNo XMP metadata found", "red")
+		cprint("\tNo EXIF metadata found", "red")
 	else:
 		for tag, value in info.items():
 		    key = TAGS.get(tag, tag)
@@ -104,13 +104,16 @@ def print_tiff(file_full_path):
 	# Print XMP metadata
 	cprint("\t-----XMP METADATA-----", "cyan")
 	xmp = file_to_dict(file_full_path)
-	dc = xmp[consts.XMP_NS_DC]
-	cprint("\t-" + dc[0][0], "cyan")
-	cprint("\t-" + dc[0][1], "cyan")
+	if not xmp: 
+		cprint("\tNo XMP metadata found", "red")
+	else: 
+		dc = xmp[consts.XMP_NS_DC]
+		cprint("\t-" + dc[0][0], "cyan")
+		cprint("\t-" + dc[0][1], "cyan")
 
-	for key, value in dc[0][2].items(): 
-		cprint("\t-" + key + ": ", "cyan", end="")
-		cprint(str(value))
+		for key, value in dc[0][2].items(): 
+			cprint("\t-" + key + ": ", "cyan", end="")
+			cprint(str(value))
 
 	# Print EXIF metadata
 	cprint("\n\t-----EXIF METADATA-----", "cyan")
@@ -164,6 +167,8 @@ def print_pdf(file_full_path):
 	else: 
 		cprint("\t No data found", "red")
 	print ""
+
+	
 # Main function
 def main (argv):
 	"""Main function of the program"""
