@@ -1,5 +1,5 @@
 # metadatos
-Script that recovers metadata from PDF and DOCX files. 
+Script that recovers metadata from PDF, DOCX, JPEG, PNG, GIF, BMP and TIFF files. 
 
 Module dependencies (installable via pip): 
 * PyPDF2
