@@ -1,0 +1,6 @@
+pypdf2
+python-docx 
+pillow 
+exifread 
+python-xmp-toolkit 
+termcolor

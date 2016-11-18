@@ -182,8 +182,10 @@ def print_tiff(file_full_path, color_mode):
 def print_docx(file_full_path, color_mode): 
 	"""Analyzes the metadata of a .docx file"""
 	# Header with file path
-	if color_mode: cprint("\n[+] Metadata for file: %s" % (file_full_path), "green", attrs=["bold"])
-	else: "\n[+] Metadata for file: %s" % (file_full_path)
+	if color_mode: 
+		cprint("\n[+] Metadata for file: %s" % (file_full_path), "green", attrs=["bold"])
+	else: 
+		print "\n[+] Metadata for file: %s" % (file_full_path)
 	# Open the file
 	docxFile = docx.Document(file(file_full_path, "rb"))
 	# Data structure with document information
@@ -208,7 +210,6 @@ def print_docx(file_full_path, color_mode):
 					cprint(str(value))
 				else: 
 					print "\t-" + str(attr) + ": " + str(value)
-	print ""
 
 def print_pdf(file_full_path, color_mode):
 	"""Analyzes the metadata of a .pdf file"""
@@ -239,8 +240,7 @@ def print_pdf(file_full_path, color_mode):
 					cprint("\t-" + metaItem[1:] + ": ", "cyan", end="")
 					cprint(pdf_info[metaItem])
 				else: 
-					print "\t-" + metaItem[1:] + ": "
-					print pdf_info[metaItem]
+					print "\t-" + metaItem[1:] + ": " + pdf_info[metaItem]
 			except TypeError: 
 				if color_mode: cprint("\t-" + metaItem[1:] + ": " + "Error - Item not readable", "red")
 				else: print "\t-" + metaItem[1:] + ": " + "Error - Item not readable"
