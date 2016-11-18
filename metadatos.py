@@ -158,6 +158,12 @@ def print_pdf(file_full_path):
 	cprint("[+] Metadata for file: %s" % (file_full_path), "green", attrs=["bold"])
 	# Open the file
 	pdf_file = PdfFileReader(file(file_full_path, "rb"))
+	if pdf_file.isEncrypted: # Temporary workaround, pdf encrypted with no pass
+		try: 
+			pdf_file.decrypt('')
+		except: 
+			cprint("\tCould not decrypt this file. Sorry!", "red")
+			return
 	# Data structure with document information
 	pdf_info = pdf_file.getDocumentInfo()
 	# Print metadata
